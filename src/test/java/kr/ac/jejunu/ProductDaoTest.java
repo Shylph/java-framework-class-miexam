@@ -5,8 +5,6 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.sql.SQLException;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
@@ -23,7 +21,7 @@ public class ProductDaoTest {
     }
 
     @Test
-    public void get() throws SQLException {
+    public void get() {
 
         Long id = 1L;
         String title = "제주감귤";
@@ -36,7 +34,7 @@ public class ProductDaoTest {
     }
 
     @Test
-    public void insert() throws SQLException {
+    public void insert() {
         Product product = new Product();
         product.setTitle("제주감귤");
         product.setPrice(15000);
@@ -49,7 +47,7 @@ public class ProductDaoTest {
     }
 
     @Test
-    public void delete() throws SQLException {
+    public void delete() {
         Product product = new Product();
         product.setTitle("제주감귤");
         product.setPrice(15000);
@@ -62,7 +60,7 @@ public class ProductDaoTest {
     }
 
     @Test
-    public void update() throws SQLException {
+    public void update() {
         Product product = new Product();
         product.setTitle("제주감귤");
         product.setPrice(15000);

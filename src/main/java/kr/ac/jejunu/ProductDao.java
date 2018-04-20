@@ -1,39 +1,63 @@
 package kr.ac.jejunu;
 
-import java.sql.SQLException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 public class ProductDao {
-    private final JdbcContext jdbcContext;
+    private final JdbcTemplate jdbcTemplate;
 
-    public ProductDao(JdbcContext jdbcContext) {
-        this.jdbcContext = jdbcContext;
+    public ProductDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Product get(Long id) throws SQLException {
+    public Product get(Long id) {
         String sql = "select * from product where id = ?";
         Object params[] = {id};
-        return jdbcContext.queryForObject(sql, params);
+        try {
+            return jdbcTemplate.queryForObject(sql, params, (rs, rowNum) -> {
+                Product product = new Product();
+                product.setId(rs.getLong("id"));
+                product.setTitle(rs.getString("title"));
+                product.setPrice(rs.getInt("price"));
+                return product;
+            });
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
 
-    public Long insert(Product product) throws SQLException {
+    public Long insert(Product product) {
         String sql = "insert into product(title,price) values(?,?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         Object params[] = {product.getTitle(), product.getPrice()};
-        return jdbcContext.insert(sql, params);
+        jdbcTemplate.update(con -> {
+            PreparedStatement preparedStatement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            for (int i = 0; i < params.length; i++) {
+                preparedStatement.setObject(i + 1, params[i]);
+            }
+            return preparedStatement;
+        },keyHolder);
+        return keyHolder.getKey().longValue();
     }
 
 
-    public void delete(Long id) throws SQLException {
+    public void delete(Long id) {
         String sql = "delete from product where id=?";
         Object params[] = {id};
-        jdbcContext.update(sql, params);
+        jdbcTemplate.update(sql, params);
     }
 
 
-    public void update(Product product) throws SQLException {
+    public void update(Product product) {
         String sql = "update product set title=?, price=? where id=?";
         Object params[] = {product.getTitle(), product.getPrice(), product.getId()};
-        jdbcContext.update(sql, params);
+        jdbcTemplate.update(sql, params);
     }
 
 }

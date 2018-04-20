@@ -1,6 +1,7 @@
 package kr.ac.jejunu;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.stereotype.Controller;
 
@@ -12,12 +13,12 @@ public class DaoFactory {
 
     @Bean
     public ProductDao productDao() throws ClassNotFoundException {
-        return new ProductDao(jdbcContext());
+        return new ProductDao(jdbcTemplate());
     }
 
     @Bean
-    public JdbcContext jdbcContext() throws ClassNotFoundException {
-        return new JdbcContext(dataSource());
+    public JdbcTemplate jdbcTemplate() throws ClassNotFoundException {
+        return new JdbcTemplate(dataSource());
     }
 
     @Bean
