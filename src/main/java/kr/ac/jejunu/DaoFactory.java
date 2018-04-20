@@ -6,7 +6,7 @@ public class DaoFactory {
         return new ProductDao(getConnectionMaker());
     }
 
-    private JejuConnectionMaker getConnectionMaker() {
+    private ConnectionMaker getConnectionMaker() {
         return new JejuConnectionMaker();
     }
 
