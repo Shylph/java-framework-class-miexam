@@ -10,13 +10,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class ProductDaoTest {
+
+    private ProductDao productDao;
+
     @Before
     public void setup() {
+        productDao = new ProductDao();
     }
 
     @Test
     public void get() throws SQLException, ClassNotFoundException {
-        ProductDao productDao = new ProductDao();
+
         Long id = 1L;
         String title = "제주감귤";
         Integer price = 15000;
@@ -29,7 +33,6 @@ public class ProductDaoTest {
 
     @Test
     public void insert() throws SQLException, ClassNotFoundException {
-        ProductDao productDao = new ProductDao();
         Product product = new Product();
         product.setTitle("제주감귤");
         product.setPrice(15000);

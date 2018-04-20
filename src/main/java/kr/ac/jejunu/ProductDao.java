@@ -4,8 +4,7 @@ import java.sql.*;
 
 public class ProductDao {
     public Product get(Long id) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:81/exam_db?characterEncoding=utf-8", "exam", "qwer");
+        Connection connection = getConnection();
 
         PreparedStatement preparedStatement = connection.prepareStatement("select * from product where id = ?");
         preparedStatement.setLong(1, id);
@@ -26,9 +25,13 @@ public class ProductDao {
         return product;
     }
 
-    public Long insert(Product product) throws SQLException, ClassNotFoundException {
+    private Connection getConnection() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:81/exam_db?characterEncoding=utf-8", "exam", "qwer");
+        return DriverManager.getConnection("jdbc:mysql://localhost:81/exam_db?characterEncoding=utf-8", "exam", "qwer");
+    }
+
+    public Long insert(Product product) throws SQLException, ClassNotFoundException {
+        Connection connection = getConnection();
 
         PreparedStatement preparedStatement = connection.prepareStatement("insert into product(title,price) values(?,?)",Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, product.getTitle());
