@@ -9,18 +9,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-public class ProductDaoTest {
+public class HallaDaoTest {
 
     private ProductDao productDao;
 
     @Before
     public void setup() {
-        productDao = new JejuProductDao();
+        productDao = new HallaProductDao();
     }
 
     @Test
     public void get() throws SQLException, ClassNotFoundException {
-
         Long id = 1L;
         String title = "제주감귤";
         Integer price = 15000;
@@ -31,16 +30,4 @@ public class ProductDaoTest {
         assertEquals(price, product.getPrice());
     }
 
-    @Test
-    public void insert() throws SQLException, ClassNotFoundException {
-        Product product = new Product();
-        product.setTitle("제주감귤");
-        product.setPrice(15000);
-        Long id = productDao.insert(product);
-
-        Product insertedProduct = productDao.get(id);
-        assertThat(insertedProduct.getId(), is(id));
-        assertThat(insertedProduct.getTitle(), is(product.getTitle()));
-        assertThat(insertedProduct.getPrice(), is(product.getPrice()));
-    }
 }
