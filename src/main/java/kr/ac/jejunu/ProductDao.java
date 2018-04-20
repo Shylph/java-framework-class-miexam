@@ -25,4 +25,26 @@ public class ProductDao {
 
         return product;
     }
+
+    public Long insert(Product product) throws SQLException, ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:81/exam_db?characterEncoding=utf-8", "exam", "qwer");
+
+        PreparedStatement preparedStatement = connection.prepareStatement("insert into product(title,price) values(?,?)",Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setString(1, product.getTitle());
+        preparedStatement.setLong(2, product.getPrice());
+
+        preparedStatement.executeUpdate();
+        ResultSet resultSet = preparedStatement.getGeneratedKeys();
+        resultSet.next();
+        Long id = resultSet.getLong(1);
+
+
+        //자원을 해지한다.
+        resultSet.close();
+        preparedStatement.close();
+        connection.close();
+
+        return id;
+    }
 }
