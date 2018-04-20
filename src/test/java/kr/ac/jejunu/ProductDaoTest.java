@@ -15,7 +15,8 @@ public class ProductDaoTest {
 
     @Before
     public void setup() {
-        productDao = new JejuProductDao();
+        ConnectionMaker connectionMaker = new JejuConnectionMaker();
+        productDao = new ProductDao(connectionMaker);
     }
 
     @Test
